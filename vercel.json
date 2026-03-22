@@ -11,8 +11,10 @@
     { "src": "^/signup.html$", "dest": "/frontend/signup.html" },
     { "src": "^/css/(.*)$", "dest": "/frontend/css/$1" },
     { "src": "^/js/(.*)$", "dest": "/frontend/js/$1" },
-    { "src": "^/api/auth$", "dest": "/api/auth.js" },
-    { "src": "^/api/expenses(.*)$", "dest": "/api/expenses.js" },
+    { "src": "^/api/auth/signup$", "dest": "/api/auth/signup.js" },
+    { "src": "^/api/auth/login$", "dest": "/api/auth/login.js" },
+    { "src": "^/api/expenses$", "dest": "/api/expenses/index.js" },
+    { "src": "^/api/expenses/(.*)$", "dest": "/api/expenses/$1" },
     { "src": "^/(.*)$", "dest": "/frontend/index.html" }
   ]
 }
