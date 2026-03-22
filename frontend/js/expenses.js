@@ -3,13 +3,6 @@
 const API_BASE = '/api';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    alert('Please login first');
-    window.location.href = '/index.html';
-    return;
-  }
-
   loadExpenses();
   populateMonthFilter();
 
@@ -24,13 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function loadExpenses() {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    alert('Session expired. Please login again.');
-    window.location.href = '/index.html';
-    return;
-  }
-
   const month = document.getElementById('monthFilter').value;
   const category = document.getElementById('categoryFilter').value;
 
@@ -41,16 +27,7 @@ async function loadExpenses() {
   if (params.toString()) url += '?' + params.toString();
 
   try {
-    const response = await fetch(url, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-
-    if (response.status === 401) {
-      alert('Session expired. Please login again.');
-      localStorage.removeItem('token');
-      window.location.href = '/index.html';
-      return;
-    }
+    const response = await fetch(url);
 
     if (response.ok) {
       const expenses = await response.json();
@@ -105,7 +82,6 @@ function calculateTotal(expenses) {
 
 async function handleAddExpense(e) {
   e.preventDefault();
-  const token = localStorage.getItem('token');
   const amount = document.getElementById('amount').value;
   const description = document.getElementById('description').value.trim();
   const category = document.getElementById('category').value;
@@ -125,8 +101,7 @@ async function handleAddExpense(e) {
     const response = await fetch(`${API_BASE}/expenses`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({ 
         amount: parseFloat(amount), 
@@ -165,16 +140,8 @@ async function deleteExpense(id) {
 
   try {
     const response = await fetch(`${API_BASE}/expenses/${id}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${token}` }
+      method: 'DELETE'
     });
-
-    if (response.status === 401) {
-      alert('Session expired. Please login again.');
-      localStorage.removeItem('token');
-      window.location.href = '/index.html';
-      return;
-    }
 
     if (response.ok) {
       loadExpenses();
@@ -221,24 +188,14 @@ function editExpense(id, amount, description, category, date) {
 }
 
 async function updateExpense(id, data) {
-  const token = localStorage.getItem('token');
-
   try {
     const response = await fetch(`${API_BASE}/expenses/${id}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
     });
-
-    if (response.status === 401) {
-      alert('Session expired. Please login again.');
-      localStorage.removeItem('token');
-      window.location.href = '/index.html';
-      return;
-    }
 
     if (response.ok) {
       loadExpenses();
@@ -273,7 +230,6 @@ function populateMonthFilter() {
 }
 
 function handleLogout() {
-  localStorage.removeItem('token');
   alert('You have been logged out');
   window.location.href = '/index.html';
 }

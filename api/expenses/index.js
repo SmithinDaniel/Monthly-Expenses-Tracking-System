@@ -1,5 +1,5 @@
 const supabase = require('../../config/supabaseClient');
-const { verifyAuthToken, applyCors } = require('../../utils/auth');
+const { applyCors } = require('../../utils/auth');
 
 function parseRange(month) {
   const [year, mon] = (month || '').split('-').map(Number);
@@ -13,15 +13,12 @@ module.exports = async (req, res) => {
   applyCors(res);
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const user = verifyAuthToken(req, res);
-  if (!user) return;
-
   if (req.method === 'GET') {
     const url = new URL(req.url, `https://${req.headers.host}`);
     const month = url.searchParams.get('month');
     const category = url.searchParams.get('category');
 
-    let query = supabase.from('expenses').select('*').eq('user_id', user.id).order('date', { ascending: false });
+    let query = supabase.from('expenses').select('*').order('date', { ascending: false });
     if (month) {
       const range = parseRange(month);
       if (range) query = query.gte('date', range.start).lte('date', range.end);
@@ -40,7 +37,7 @@ module.exports = async (req, res) => {
     const numericAmount = parseFloat(amount);
     if (Number.isNaN(numericAmount) || numericAmount <= 0) return res.status(400).json({ message: 'Amount must be a positive number' });
 
-    const { data, error } = await supabase.from('expenses').insert([{ user_id: user.id, amount: numericAmount, description, category, date }]).select().single();
+    const { data, error } = await supabase.from('expenses').insert([{ amount: numericAmount, description, category, date }]).select().single();
     if (error) return res.status(500).json({ message: 'Error adding expense', error });
     return res.status(201).json(data);
   }

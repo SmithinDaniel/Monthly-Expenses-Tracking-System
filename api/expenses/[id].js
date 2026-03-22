@@ -1,12 +1,9 @@
 const supabase = require('../../config/supabaseClient');
-const { verifyAuthToken, applyCors } = require('../../utils/auth');
+const { applyCors } = require('../../utils/auth');
 
 module.exports = async (req, res) => {
   applyCors(res);
   if (req.method === 'OPTIONS') return res.status(200).end();
-
-  const user = verifyAuthToken(req, res);
-  if (!user) return;
 
   const id = req.query.id;
   if (!id) return res.status(400).json({ message: 'Expense ID required' });
