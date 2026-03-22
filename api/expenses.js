@@ -53,7 +53,7 @@ module.exports = async (req, res) => {
 
   if ((req.method === 'PUT' || req.method === 'DELETE')) {
     const pathParts = req.url.split('/').filter(p => p);
-    const id = pathParts[0]; // for /123, pathParts = ['123']
+    const id = pathParts[pathParts.length - 1];
     if (!id) return res.status(400).json({ message: 'Expense ID required' });
 
     if (req.method === 'PUT') {

@@ -33,12 +33,19 @@ async function loadExpenses() {
       displayExpenses(expenses);
       calculateTotal(expenses);
     } else {
-      console.error('Failed to load expenses:', response.statusText);
-      alert('Failed to load expenses');
+      let message = `HTTP ${response.status}`;
+      try {
+        const body = await response.json();
+        message = body?.message || body?.error?.message || message;
+      } catch (parseError) {
+        // ignore parse error and use status text
+      }
+      console.error('Failed to load expenses:', response.status, message);
+      alert(`Failed to load expenses: ${message}`);
     }
   } catch (error) {
     console.error('Load expenses error:', error);
-    alert('Network error. Please check your connection.');
+    alert('Network error. Please check your connection and ensure the backend is reachable.');
   }
 }
 
