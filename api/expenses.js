@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
     return res.status(200).end();
   }
 
-  if (req.method === 'GET' && req.url.startsWith('/api/expenses')) {
+  if (req.method === 'GET') {
     const url = new URL(req.url, `http://${req.headers.host}`);
     const month = url.searchParams.get('month');
     const category = url.searchParams.get('category');
@@ -39,7 +39,7 @@ module.exports = async (req, res) => {
     return res.json(data);
   }
 
-  if (req.method === 'POST' && req.url === '/api/expenses') {
+  if (req.method === 'POST') {
     const { amount, description, category, date } = req.body;
     if (!amount || !description || !category || !date) return res.status(400).json({ message: 'All fields are required' });
 
@@ -51,8 +51,9 @@ module.exports = async (req, res) => {
     return res.status(201).json(data);
   }
 
-  if ((req.method === 'PUT' || req.method === 'DELETE') && req.url.startsWith('/api/expenses/')) {
-    const id = req.url.split('/').pop();
+  if ((req.method === 'PUT' || req.method === 'DELETE')) {
+    const pathParts = req.url.split('/').filter(p => p);
+    const id = pathParts[0]; // for /123, pathParts = ['123']
     if (!id) return res.status(400).json({ message: 'Expense ID required' });
 
     if (req.method === 'PUT') {

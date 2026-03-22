@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('expenseForm').addEventListener('submit', handleAddExpense);
   document.getElementById('monthFilter').addEventListener('change', loadExpenses);
   document.getElementById('categoryFilter').addEventListener('change', loadExpenses);
-  document.getElementById('logoutBtn').addEventListener('click', handleLogout);
 
   // Set today's date as default
   const today = new Date().toISOString().split('T')[0];
@@ -110,13 +109,6 @@ async function handleAddExpense(e) {
         date 
       })
     });
-
-    if (response.status === 401) {
-      alert('Session expired. Please login again.');
-      localStorage.removeItem('token');
-      window.location.href = '/index.html';
-      return;
-    }
 
     if (response.ok) {
       document.getElementById('expenseForm').reset();
@@ -241,9 +233,4 @@ function populateMonthFilter() {
 
   // Initial load for all months
   loadExpenses();
-}
-
-function handleLogout() {
-  alert('You have been logged out');
-  window.location.href = '/index.html';
 }
