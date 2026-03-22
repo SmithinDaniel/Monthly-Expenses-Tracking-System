@@ -124,7 +124,12 @@ async function handleAddExpense(e) {
       loadExpenses();
       alert('Expense added successfully!');
     } else {
-      const error = await response.json();
+      let error;
+      try {
+        error = await response.json();
+      } catch (e) {
+        error = { message: 'Server error. Please try again.' };
+      }
       alert(error.message || 'Failed to add expense');
     }
   } catch (error) {
@@ -145,7 +150,13 @@ async function deleteExpense(id) {
       loadExpenses();
       alert('Expense deleted successfully!');
     } else {
-      alert('Failed to delete expense');
+      let error;
+      try {
+        error = await response.json();
+      } catch (e) {
+        error = { message: 'Server error. Please try again.' };
+      }
+      alert(error.message || 'Failed to delete expense');
     }
   } catch (error) {
     console.error('Delete expense error:', error);
@@ -199,7 +210,12 @@ async function updateExpense(id, data) {
       loadExpenses();
       alert('Expense updated successfully!');
     } else {
-      const error = await response.json();
+      let error;
+      try {
+        error = await response.json();
+      } catch (e) {
+        error = { message: 'Server error. Please try again.' };
+      }
       alert(error.message || 'Failed to update expense');
     }
   } catch (error) {

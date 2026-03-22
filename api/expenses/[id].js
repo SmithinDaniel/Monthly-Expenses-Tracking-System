@@ -3,6 +3,11 @@ const { applyCors } = require('../../utils/auth');
 
 module.exports = async (req, res) => {
   applyCors(res);
+
+  if (!supabase) {
+    return res.status(500).json({ message: 'Supabase client not configured. Please set SUPABASE_URL and key in environment variables.' });
+  }
+
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const id = req.query.id;
