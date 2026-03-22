@@ -14,13 +14,13 @@ module.exports = async (req, res) => {
     const numericAmount = parseFloat(amount);
     if (Number.isNaN(numericAmount) || numericAmount <= 0) return res.status(400).json({ message: 'Amount must be a positive number' });
 
-    const { data, error } = await supabase.from('expenses').update({ amount: numericAmount, description, category, date, updated_at: new Date() }).eq('id', id).eq('user_id', user.id).select().single();
+    const { data, error } = await supabase.from('expenses').update({ amount: numericAmount, description, category, date, updated_at: new Date() }).eq('id', id).select().single();
     if (error) return res.status(500).json({ message: 'Error updating expense', error });
     return res.status(200).json(data);
   }
 
   if (req.method === 'DELETE') {
-    const { error } = await supabase.from('expenses').delete().eq('id', id).eq('user_id', user.id);
+    const { error } = await supabase.from('expenses').delete().eq('id', id);
     if (error) return res.status(500).json({ message: 'Error deleting expense', error });
     return res.status(200).json({ message: 'Expense deleted' });
   }

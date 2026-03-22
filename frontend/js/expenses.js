@@ -134,8 +134,6 @@ async function handleAddExpense(e) {
 }
 
 async function deleteExpense(id) {
-  const token = localStorage.getItem('token');
-
   if (!confirm('Are you sure you want to delete this expense?')) return;
 
   try {
