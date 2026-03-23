@@ -1,5 +1,5 @@
-const supabase = require('./config/supabaseClient');
-const { applyCors } = require('./utils/auth');
+const supabase = require('../config/supabaseClient');
+const { applyCors } = require('../utils/auth');
 
 function parseMonthDateRange(monthString) {
   const [year, month] = monthString.split('-').map(Number);

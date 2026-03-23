@@ -1,5 +1,5 @@
-const supabase = require('../../config/supabaseClient');
-const { applyCors } = require('../../utils/auth');
+const supabase = require('../config/supabaseClient');
+const { applyCors } = require('../utils/auth');
 
 module.exports = async (req, res) => {
   try {
